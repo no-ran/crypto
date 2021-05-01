@@ -17,7 +17,11 @@
     "typescript": "^4.2.4",
     "web-vitals": "^1.1.1"
   },
+  "resolutions": {
+    "@neo-one/smart-contract-test-common": "2.7.0"
+  },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
