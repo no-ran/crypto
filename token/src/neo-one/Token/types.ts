@@ -1,4 +1,4 @@
-/* @hash 2fd90c331f7b1ba0722b6f5d90790738 */
+/* @hash 9e91499bfbe00cf65652eb6e3d8df308 */
 // tslint:disable
 /* eslint-disable */
 import {
@@ -7,6 +7,8 @@ import {
   GetOptions,
   InvocationTransaction,
   InvokeReceipt,
+  InvokeReceiveTransactionOptions,
+  InvokeSendUnsafeTransactionOptions,
   SmartContract,
   TransactionOptions,
   TransactionResult,
@@ -19,25 +21,68 @@ export interface TokenSmartContract<TClient extends Client = Client> extends Sma
   readonly balanceOf: (address: AddressString) => Promise<BigNumber>;
   readonly decimals: () => Promise<BigNumber>;
   readonly deploy: {
-    (options?: TransactionOptions): Promise<
+    (owner?: AddressString, options?: TransactionOptions): Promise<
       TransactionResult<InvokeReceipt<boolean, TokenEvent>, InvocationTransaction>
     >;
     readonly confirmed: (
+      owner?: AddressString,
       options?: TransactionOptions & GetOptions,
     ) => Promise<InvokeReceipt<boolean, TokenEvent> & { readonly transaction: InvocationTransaction }>;
   };
+  readonly mintTokens: {
+    (options?: InvokeReceiveTransactionOptions): Promise<
+      TransactionResult<InvokeReceipt<undefined, TokenEvent>, InvocationTransaction>
+    >;
+    readonly confirmed: (
+      options?: InvokeReceiveTransactionOptions & GetOptions,
+    ) => Promise<InvokeReceipt<undefined, TokenEvent> & { readonly transaction: InvocationTransaction }>;
+  };
   readonly name: () => Promise<string>;
+  readonly owner: () => Promise<AddressString>;
+  readonly refundAssets: {
+    (options?: InvokeSendUnsafeTransactionOptions): Promise<
+      TransactionResult<InvokeReceipt<undefined, TokenEvent>, InvocationTransaction>
+    >;
+    readonly confirmed: (
+      options?: InvokeSendUnsafeTransactionOptions & GetOptions,
+    ) => Promise<InvokeReceipt<undefined, TokenEvent> & { readonly transaction: InvocationTransaction }>;
+  };
   readonly symbol: () => Promise<string>;
   readonly totalSupply: () => Promise<BigNumber>;
+  readonly transfer: {
+    (from: AddressString, to: AddressString, amount: BigNumber, options?: TransactionOptions): Promise<
+      TransactionResult<InvokeReceipt<boolean, TokenEvent>, InvocationTransaction>
+    >;
+    readonly confirmed: (
+      from: AddressString,
+      to: AddressString,
+      amount: BigNumber,
+      options?: TransactionOptions & GetOptions,
+    ) => Promise<InvokeReceipt<boolean, TokenEvent> & { readonly transaction: InvocationTransaction }>;
+  };
 }
 
 export interface TokenMigrationSmartContract {
   readonly balanceOf: (address: AddressString | Promise<AddressString>) => Promise<BigNumber>;
   readonly decimals: () => Promise<BigNumber>;
   readonly deploy: (
+    owner?: AddressString | Promise<AddressString>,
     options?: TransactionOptions & GetOptions,
   ) => Promise<InvokeReceipt<boolean, TokenEvent> & { readonly transaction: InvocationTransaction }>;
+  readonly mintTokens: (
+    options?: InvokeReceiveTransactionOptions & GetOptions,
+  ) => Promise<InvokeReceipt<undefined, TokenEvent> & { readonly transaction: InvocationTransaction }>;
   readonly name: () => Promise<string>;
+  readonly owner: () => Promise<AddressString>;
+  readonly refundAssets: (
+    options?: InvokeSendUnsafeTransactionOptions & GetOptions,
+  ) => Promise<InvokeReceipt<undefined, TokenEvent> & { readonly transaction: InvocationTransaction }>;
   readonly symbol: () => Promise<string>;
   readonly totalSupply: () => Promise<BigNumber>;
+  readonly transfer: (
+    from: AddressString | Promise<AddressString>,
+    to: AddressString | Promise<AddressString>,
+    amount: BigNumber | Promise<BigNumber>,
+    options?: TransactionOptions & GetOptions,
+  ) => Promise<InvokeReceipt<boolean, TokenEvent> & { readonly transaction: InvocationTransaction }>;
 }

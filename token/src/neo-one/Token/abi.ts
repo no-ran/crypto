@@ -1,4 +1,4 @@
-/* @hash bab274bdf2eb53dc406f5cbfc43a09c1 */
+/* @hash 1da82ee140c2a0e51435e125ad68475b */
 // tslint:disable
 /* eslint-disable */
 import { ABI } from '@neo-one/client';
@@ -71,8 +71,83 @@ export const tokenABI: ABI = {
       sendUnsafe: false,
     },
     {
-      name: 'deploy',
+      constant: true,
+      name: 'owner',
       parameters: [],
+      returnType: {
+        forwardedValue: false,
+        optional: false,
+        type: 'Address',
+      },
+    },
+    {
+      claim: false,
+      constant: false,
+      name: 'transfer',
+      parameters: [
+        {
+          forwardedValue: false,
+          name: 'from',
+          optional: false,
+          type: 'Address',
+        },
+        {
+          forwardedValue: false,
+          name: 'to',
+          optional: false,
+          type: 'Address',
+        },
+        {
+          decimals: 8,
+          forwardedValue: false,
+          name: 'amount',
+          optional: false,
+          type: 'Integer',
+        },
+      ],
+      receive: false,
+      returnType: {
+        forwardedValue: false,
+        optional: false,
+        type: 'Boolean',
+      },
+      send: false,
+      sendUnsafe: false,
+    },
+    {
+      claim: false,
+      constant: false,
+      name: 'mintTokens',
+      parameters: [],
+      receive: true,
+      returnType: {
+        optional: false,
+        type: 'Void',
+      },
+      send: false,
+      sendUnsafe: false,
+    },
+    {
+      name: 'refundAssets',
+      parameters: [],
+      returnType: {
+        type: 'Void',
+      },
+      sendUnsafe: true,
+    },
+    {
+      name: 'deploy',
+      parameters: [
+        {
+          default: {
+            type: 'sender',
+          },
+          forwardedValue: false,
+          name: 'owner',
+          optional: true,
+          type: 'Address',
+        },
+      ],
       returnType: {
         type: 'Boolean',
       },
